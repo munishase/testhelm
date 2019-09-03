@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "helm-chart-api.fullname" . }}-test-connection"
+  labels:
+{{ include "helm-chart-api.labels" . | indent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args:  ['{{ include "helm-chart-api.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
